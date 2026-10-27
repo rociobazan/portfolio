@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+/* El modo oscuro se activa con data-theme="dark" en <html> (lo pone el script del layout). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --background: #fdf8fb;
+  --surface: #ffffff;
+  --foreground: #2a1830;
+  --muted: #6b5872;
+  --border: #eedfea;
+  --pink: #c4206a;
+  --lilac: #7c3aed;
+  --pink-soft: #fce7f3;
+  --lilac-soft: #ede9fe;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --background: #140f1c;
+  --surface: #1e1729;
+  --foreground: #f3e8f7;
+  --muted: #b8a6c2;
+  --border: #33284a;
+  --pink: #f472b6;
+  --lilac: #c4b5fd;
+  --pink-soft: #3b1730;
+  --lilac-soft: #2a2047;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-pink: var(--pink);
+  --color-lilac: var(--lilac);
+  --color-pink-soft: var(--pink-soft);
+  --color-lilac-soft: var(--lilac-soft);
+  --font-sans: var(--font-jakarta);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Deja lugar para el menú fijo al saltar a una sección. */
+section[id] {
+  scroll-margin-top: 4.5rem;
+}
+
+/* Fundido al aparecer los elementos con data-reveal, solo con CSS (animación ligada al desplazamiento).
+   Los navegadores que no lo soportan, o si se pidió reducir movimiento, muestran todo sin animación. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: reveal ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 80%;
+    }
+  }
+}
+
+/* Evita que la página de fondo se desplace con la galería abierta. */
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
